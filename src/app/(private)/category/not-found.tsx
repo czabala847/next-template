@@ -1,7 +1,7 @@
-import { Button } from "@/common/presentation/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/common/presentation/components/ui/card"
-import Link from "next/link"
-import { BiCategory, BiError } from "react-icons/bi"
+import { Button } from "@/shared/presentation/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/presentation/components/ui/card";
+import Link from "next/link";
+import { BiCategory, BiError } from "react-icons/bi";
 
 const CategoryNotFound = () => {
   return (

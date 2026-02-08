@@ -1,14 +1,14 @@
-import { Button } from "@/common/presentation/components/ui/button"
+import { Button } from "@/shared/presentation/components/ui/button"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/common/presentation/components/ui/card"
-import { Input } from "@/common/presentation/components/ui/input"
-import { Label } from "@/common/presentation/components/ui/label"
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/shared/presentation/components/ui/card"
+import { Input } from "@/shared/presentation/components/ui/input"
+import { Label } from "@/shared/presentation/components/ui/label"
 import Link from "next/link"
 
 export default function LoginPage() {

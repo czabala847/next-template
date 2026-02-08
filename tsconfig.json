@@ -20,8 +20,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/modules/*": ["./src/modules/*"],
-      "@/common/*": ["./src/common/*"],
+      "@/modules/*": ["src/modules/*"],
+      "@/common/*": ["src/shared/*"],
       "@/app/*": ["./src/app/*"],
       "@/config/*": ["./src/config/*"]
     }
