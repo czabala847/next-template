@@ -10,3 +10,12 @@ export interface ProductApi {
     count: number;
   };
 }
+
+export interface CreateProductApiRequest {
+  name: string;
+  description: string;
+  basePrice: number;
+  category: string;
+  stock: number;
+  sku: string;
+}
