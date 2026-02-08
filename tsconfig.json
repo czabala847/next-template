@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/modules/*": ["./src/modules/*"],
+      "@/common/*": ["./src/common/*"],
+      "@/app/*": ["./src/app/*"],
+      "@/config/*": ["./src/config/*"]
     }
   },
   "include": [
