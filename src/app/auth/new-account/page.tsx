@@ -11,20 +11,28 @@ import { Input } from "@/common/presentation/components/ui/input"
 import { Label } from "@/common/presentation/components/ui/label"
 import Link from "next/link"
 
-export default function LoginPage() {
+export default function NewAccountPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted/50 p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
+          <CardTitle className="text-2xl">Crear Cuenta</CardTitle>
           <CardDescription>
-            Ingresa tu usuario y contraseña para acceder.
+            Introduce tus datos para crear una nueva cuenta.
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">
           <div className="grid gap-2">
+            <Label htmlFor="name">Nombre Completo</Label>
+            <Input id="name" placeholder="John Doe" required />
+          </div>
+          <div className="grid gap-2">
             <Label htmlFor="username">Usuario</Label>
-            <Input id="username" type="text" placeholder="Tu usuario" required />
+            <Input id="username" placeholder="johndoe" required />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="email">Correo Electrónico</Label>
+            <Input id="email" type="email" placeholder="m@example.com" required />
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Contraseña</Label>
@@ -32,11 +40,11 @@ export default function LoginPage() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-col gap-2">
-          <Button className="w-full">Ingresar</Button>
+          <Button className="w-full">Registrarse</Button>
           <div className="mt-2 text-center text-sm">
-            ¿No tienes cuenta?{" "}
-            <Link href="/auth/new-account" className="underline underline-offset-4">
-              Regístrate
+            ¿Ya tienes cuenta?{" "}
+            <Link href="/auth/login" className="underline underline-offset-4">
+              Inicia Sesión
             </Link>
           </div>
         </CardFooter>
