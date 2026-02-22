@@ -1,4 +1,4 @@
-import { CreateProductDto, Product } from './product.entity'
+import { CreateProductDto, Product } from '../product.entity';
 
 export interface IProductRepository {
     getAll(): Promise<Product[]>;

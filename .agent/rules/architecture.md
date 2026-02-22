@@ -1,121 +1,78 @@
-# DDD Clean Architecture Structure
+# DDD Clean Architecture Rules
 
-This project follows **Domain-Driven Design (DDD)** with **Clean Architecture** principles.
+This project follows **Domain-Driven Design (DDD)** with **Clean Architecture** principles, organized into 4 distinct layers.
 
-## Folder Structure Rules
+## 🏗️ The 4 Layers & Their Responsibilities
 
-### Module Structure
-Each feature module in `src/modules/[module-name]/` MUST have three layers:
+### 1. Domain (Business Core)
+**Purpose:** Defines **WHAT** the business is and **WHAT** operation can be done, without knowing **HOW**.
+**Contains:**
+- `*.entity.ts`: Interfaces representing business concepts (The "Truth").
+- `*.repository.interface.ts`: Contracts defining operations (findAll, create, delete) without implementation.
+**Rule:** Pure logic. NO dependencies on external APIs, DBs, or frameworks.
 
-1. **domain/** - Pure business logic (NO external dependencies)
-   - `entities/` - Domain entities
-   - `repositories/` - Repository interfaces (contracts)
-   - `services/` - Domain services
-   - `value-objects/` - Value objects
+### 2. Infrastructure (Technical Details)
+**Purpose:** Implements **HOW** things are done (API connections, data transformations).
+**Contains:**
+- `dtos/`: Exact types of external API responses (things you don't control).
+- `mappers/`: Adapters transforming external data to Domain format (Anti-Corruption Layer).
+- `repositories/`: Real implementations (fetch, HTTP error handling, mapping).
+**Rule:** If the API changes, ONLY this layer changes.
 
-2. **infrastructure/** - External dependencies and implementations
-   - `api/` - API clients
-   - `repositories/` - Repository implementations
-   - `mappers/` - Data mappers/adapters
-   - `store/` - **Zustand stores belong here** (state management is infrastructure)
+### 3. Application (Use Cases)
+**Purpose:** Orchestrates business logic. Validates, authenticates, calls repositories.
+**Contains:**
+- `actions/queries.ts`: Server Actions for reading data (GET).
+- `actions/commands.ts`: Server Actions for mutating data (POST/PUT/DELETE).
+**Rule:** Centralizes "what happens when user does X". Does not mix UI with API calls.
 
-3. **presentation/** - UI layer
-   - `components/` - React components
-   - `hooks/` - Custom hooks (wrap stores for clean component code)
-   - `utils/` - UI utilities
-   - `pages/` - Page-specific components
+### 4. Presentation (UI)
+**Purpose:** Visual components the user interacts with.
+**Contains:**
+- `components/`: Render UI and call Server Actions.
+**Rule:** Components are "dumb". They don't know about APIs or business logic, just render and trigger actions.
 
-### Common Folder
-`src/common/` contains shared code with the same three-layer structure:
-- `domain/` - Shared business logic
-- `infrastructure/` - Shared infrastructure (API clients, storage, **Zustand stores**)
-- `presentation/` - Shared UI (components, hooks, utils, styles)
+## 📂 Directory Structure
 
-### App Folder
-`src/app/` contains Next.js App Router pages only.
+```
+src/
+├── app/                    # Next.js Routes
+├── config/                 # Global configurations
+├── lib/                    # Third-party libraries
+├── shared/                 # Shared code across modules
+│   ├── domain/
+│   ├── infrastructure/
+│   └── presentation/
+└── modules/                # Business Modules
+    └── [module-name]/
+        ├── domain/
+        │   ├── [entity].entity.ts
+        │   └── [entity].repository.interface.ts
+        ├── infrastructure/
+        │   ├── dtos/
+        │   │   └── [entity].dto.ts
+        │   ├── mappers/
+        │   │   └── [entity].mapper.ts
+        │   └── repositories/
+        │       └── [entity].repository.ts
+        ├── application/
+        │   └── actions/
+        │       ├── queries.ts
+        │       └── commands.ts
+        └── presentation/
+            └── components/
+```
 
-## State Management with Zustand
+## 📏 Rules of Dependency
+1. **Domain** depends on **Nothing**.
+2. **Application** depends on **Domain** and **Infrastructure**.
+3. **Presentation** depends on **Application**.
+4. **Infrastructure** depends on **Domain** (implements interfaces).
 
-### ✅ Correct Placement
-**Zustand stores MUST be in the infrastructure layer:**
-- Module stores: `src/modules/[module-name]/infrastructure/store/`
-- Shared stores: `src/common/infrastructure/store/`
-
-**Why infrastructure?**
-- Zustand is an external library dependency
-- State management is an infrastructure concern
-- Domain layer must remain pure (no external dependencies)
-
-### Architecture Pattern
-Follow this three-tier pattern:
-
-1. **Store** (infrastructure layer)
-   ```typescript
-   // src/common/infrastructure/store/counter-store.ts
-   import { create } from 'zustand';
-   
-   export const useCounterStore = create<CounterState>((set) => ({
-     count: 0,
-     increment: () => set((state) => ({ count: state.count + 1 })),
-   }));
-   ```
-
-2. **Hook** (presentation layer)
-   ```typescript
-   // src/common/presentation/hooks/use-counter.ts
-   import { useCounterStore } from '@/common/infrastructure/store/counter-store';
-   
-   export const useCounter = () => {
-     const count = useCounterStore((state) => state.count);
-     const increment = useCounterStore((state) => state.increment);
-     return { count, increment };
-   };
-   ```
-
-3. **Component** (presentation layer)
-   ```typescript
-   // src/common/presentation/components/counter.tsx
-   'use client';
-   import { useCounter } from '@/common/presentation/hooks/use-counter';
-   
-   export const Counter = () => {
-     const { count, increment } = useCounter();
-     return <button onClick={increment}>{count}</button>;
-   };
-   ```
-
-## Import Rules
-
-### TypeScript Path Aliases
-ALWAYS use these path aliases:
-- `@/modules/*` - Feature modules
-- `@/common/*` - Shared code
-- `@/app/*` - App pages
-- `@/config/*` - Configuration
-
-### Dependency Rules
-- **Domain layer** - NO imports from infrastructure or presentation
-- **Infrastructure layer** - Can import from domain
-- **Presentation layer** - Can import from domain and infrastructure
-- **Modules** - Should NOT directly depend on other modules (use common for shared code)
-
-## File Naming Conventions
-- Components: `kebab-case.tsx` (e.g., `product-card.tsx`)
-- Hooks: `use-[name].ts` (e.g., `use-product.ts`)
-- Stores: `[name]-store.ts` (e.g., `product-store.ts`)
-- Entities: `[name].ts` (e.g., `product.ts`)
-
-## Best Practices
-
-1. **Keep domain pure** - No external dependencies in domain layer
-2. **State in infrastructure** - All Zustand stores in infrastructure layer
-3. **Wrap stores in hooks** - Don't use stores directly in components
-4. **Use path aliases** - Always use `@/` imports
-5. **Module independence** - Modules should not depend on each other
-6. **Share via common** - Put shared code in `common/` folder
-
-## Example Reference
-See the counter example implementation:
-- Store: `src/common/infrastructure/store/counter-store.ts`
-- Hook: `src/common/presentation/hooks/use-counter.ts`
-- Component: `src/common/presentation/components/counter-example.tsx`
+## 📝 Naming Conventions
+- Entities: `[name].entity.ts`
+- Interfaces: `[name].repository.interface.ts`
+- DTOs: `[name].dto.ts`
+- Mappers: `[name].mapper.ts`
+- Repositories: `[name].repository.ts`
+- Server Actions: `queries.ts` (Read), `commands.ts` (Write)

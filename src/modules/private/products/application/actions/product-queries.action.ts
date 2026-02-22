@@ -1,9 +1,10 @@
 "use server";
 
-import { IProductRepository, Product } from "../../domain"
+import { IProductRepository, Product } from "@/modules/private/products/domain"
+import { productRepository } from '@/modules/private/products/infrastructure'
 
 export const getProductsAction = async (
-  repository: IProductRepository,
+  repository: IProductRepository = productRepository,
 ): Promise<Product[]> => {
   try {
     const products = await repository.getAll();

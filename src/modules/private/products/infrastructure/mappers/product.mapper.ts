@@ -1,11 +1,11 @@
 import {
   CreateProductDto,
   Product,
-} from "@/modules/products/domain/product.entity"
+} from "@/modules/private/products/domain/product.entity"
 import {
   CreateProductApiRequest,
   ProductApi,
-} from "@/modules/products/infrastructure/dtos/product.dto"
+} from "@/modules/private/products/infrastructure/dtos/product.dto"
 
 export class ProductMapper {
   static toDomain(product: ProductApi): Product {

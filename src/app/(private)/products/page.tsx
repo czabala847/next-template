@@ -1,11 +1,10 @@
 export const revalidate = 60;// ISR: revalida la página cada 60 segundos, para no cachear la página
 
-import { getProductsAction } from '@/modules/products/application'
-import { productRepository } from '@/modules/products/infrastructure'
+import { getProductsAction } from '@/modules/private/products/application'
 import Image from "next/image"
 
 const ProductsPage = async () => {
-  const products = await getProductsAction(productRepository);
+  const products = await getProductsAction();
 
   return (
     <div className="p-8">
