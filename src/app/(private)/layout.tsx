@@ -1,7 +1,13 @@
+import { Header } from "@/common/presentation/components"
 import React from "react"
 
-const PublicLayout = ({ children }: { children: React.ReactNode }) => {
-  return <main>{children}</main>;
+const PrivateLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <>
+      <Header />
+      <main>{children}</main>
+    </>
+  );
 };
 
-export default PublicLayout;
+export default PrivateLayout;

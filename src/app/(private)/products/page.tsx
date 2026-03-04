@@ -1,14 +1,28 @@
 export const revalidate = 60;// ISR: revalida la página cada 60 segundos, para no cachear la página
 
 import { getProductsAction } from '@/modules/private/products/application'
+import { ProductResume } from '@/modules/private/products/presentation/components'
+import { authOptions } from '@/shared/infrastructure/auth/auth.config'
+import { getServerSession } from 'next-auth'
 import Image from "next/image"
 
 const ProductsPage = async () => {
+
+  const session = await getServerSession(authOptions);
+
   const products = await getProductsAction();
 
   return (
     <div className="p-8">
       <h1 className="text-2xl font-bold mb-4">Products Test</h1>
+
+      <div>
+        <h2>Sesión del usuario desde el servidor</h2>
+        <pre className="text-sm font-mono">{JSON.stringify(session, null, 3)}</pre>
+      </div>
+
+      <ProductResume />
+      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {products.map((product) => (
           <div key={product.id} className="border p-4 rounded shadow">

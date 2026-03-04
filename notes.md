@@ -6,3 +6,9 @@ importante usar Link y los iconos de react-icons
 mejorar estado de zustand tomar estructura del proyecto de react native expo
 
 mejorar readme
+
+implementar proteccion de rutas
+
+implementar react query
+
+manejo de roles
